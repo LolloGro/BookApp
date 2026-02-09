@@ -1,6 +1,36 @@
 @BookApp_HostAddress = http://localhost:5249
 
-GET {{BookApp_HostAddress}}/weatherforecast/
+GET {{BookApp_HostAddress}}/api/Book
 Accept: application/json
 
 ###
+@id =1
+GET {{BookApp_HostAddress}}/api/Book/{{id}}
+Accept: application/json
+
+###
+
+POST {{BookApp_HostAddress}}/api/Book
+Content-Type: application/json
+
+{
+"title": "Britt-Marie var här",
+"author": "Fredrik Backman",
+"publishDate": "2026-02-09T00:00:00"
+}
+
+###
+@idUpdate = 2
+PUT {{BookApp_HostAddress}}/api/Book/{{idUpdate}}
+Content-Type: application/json
+
+{
+  "title": "Björnstad",
+  "author": "Fredrik Backman",
+  "publishDate": "2027-02-09T00:00:00"
+}
+
+###
+@idRemove = 3
+DELETE {{BookApp_HostAddress}}/api/Book/{{idRemove}}
+Accept: application/json
