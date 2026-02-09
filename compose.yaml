@@ -15,7 +15,7 @@
     image: mysql:8.0
     environment:
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: Bookdb
+      MYSQL_DATABASE: BookDb
     ports:
       - "3306:3306"
     volumes:
