@@ -1,0 +1,27 @@
+﻿services:
+  bookapp:
+    image: bookapp
+    build:
+      context: .
+      dockerfile: BookApp/Dockerfile
+    ports: 
+      - "5000:80"
+    environment:
+      - ConnectionStrings__DefaultConnection=server=db;port=3306;database=BookDb;user=root;password=password
+    depends_on:
+      - db
+  
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: Bookdb
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+  
+volumes:
+    db_data:
+    
+
