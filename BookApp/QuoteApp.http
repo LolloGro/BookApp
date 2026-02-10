@@ -1,0 +1,35 @@
+@BookApp_HostAddress = http://localhost:5249
+
+GET {{BookApp_HostAddress}}/api/Quote
+Accept: application/json
+
+###
+
+@id = 1
+GET {{BookApp_HostAddress}}/api/Quote/{{id}}
+Accept: application/json
+
+###
+
+POST {{BookApp_HostAddress}}/api/Quote
+Content-Type: application/json
+
+{
+"quoteText": "Alla människor bär på ett djup, men inte alla vågar dyka"
+}
+
+###
+@updateId = 2
+PUT {{BookApp_HostAddress}}/api/Quote/{{updateId}}
+Content-Type: application/json
+
+{
+  "quoteText": "Alla människor bär på ett djup -men inte alla vågar dyka"
+}
+
+###
+ @deleteId = 2
+DELETE {{BookApp_HostAddress}}/api/Quote/{{deleteId}}
+Accept: application/json
+
+###

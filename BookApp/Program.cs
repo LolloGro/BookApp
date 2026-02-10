@@ -13,6 +13,7 @@ builder.Services.AddDbContext<BookDb>(options =>
 
 
 builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IQuoteService, QuoteService>();
 
 builder.Services.AddControllers();
 
@@ -55,6 +56,14 @@ using (var scope = app.Services.CreateScope())
                     new Book { Title = "Folk med ångest", Author = "Fredrik Backman", PublishDate = DateTime.Now });
                 db.SaveChanges();
             }
+
+            if (!db.Quotes.Any())
+            {
+                db.Quotes.AddRange(
+                    new Quote { QuoteText = "Ta igen skit" });
+                db.SaveChanges();
+            }
+            
             Console.WriteLine("Database migrated"); 
             break;
         }
