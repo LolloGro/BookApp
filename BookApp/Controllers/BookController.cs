@@ -6,27 +6,19 @@ namespace BookApp.Controllers
     //ApiController validates 
     [Route("api/[controller]")]
     [ApiController]
-    public class BookController : ControllerBase
+    public class BookController(IBookService service) : ControllerBase
     {
-
-        private readonly IBookService _service;
-
-        public BookController(IBookService service)
-        {
-            _service = service;
-        }
-        
         [HttpGet]
         // With ActionResult you define return of a status code 
         public ActionResult<List<Book>> GetBooks()
         {
-            return Ok(_service.GetAll()); 
+            return Ok(service.GetAll()); 
         }
 
         [HttpGet("{id}")]
         public ActionResult<Book> GetBookById(int id)
         {
-            var book = _service.GetById(id);
+            var book = service.GetById(id);
             
             if (book == null)
             {
@@ -39,7 +31,7 @@ namespace BookApp.Controllers
         [HttpPost]
         public ActionResult<Book> AddBook(Book book)
         {
-            var addedBook = _service.Create(book);
+            var addedBook = service.Create(book);
             return CreatedAtAction(nameof(GetBookById), new { id = addedBook.Id }, addedBook);
         }
 
@@ -48,7 +40,7 @@ namespace BookApp.Controllers
         {
             try
             {
-             _service.Update(id, updatedBook);
+             service.Update(id, updatedBook);
             }
             catch (KeyNotFoundException)
             {
@@ -63,7 +55,7 @@ namespace BookApp.Controllers
         {
             try
             {
-                _service.Delete(id);
+                service.Delete(id);
             }
             catch (KeyNotFoundException)
             {
