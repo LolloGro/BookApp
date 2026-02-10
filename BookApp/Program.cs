@@ -1,9 +1,16 @@
+using System.Text;
 using BookApp;
 using BookApp.Models;
 using BookApp.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<IBookService, BookService>();
+builder.Services.AddScoped<IQuoteService, QuoteService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Connection to database 
 builder.Services.AddDbContext<BookDb>(options => 
@@ -11,26 +18,30 @@ builder.Services.AddDbContext<BookDb>(options =>
         new MySqlServerVersion(new Version(8, 0, 45)),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure()));
 
-
-builder.Services.AddScoped<IBookService, BookService>();
-builder.Services.AddScoped<IQuoteService, QuoteService>();
-
 builder.Services.AddControllers();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+builder.Services.AddAuthentication(auth =>
+    {
+        auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        auth.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(opt =>
+    {
+        var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+        opt.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = false,
+            ValidateAudience = false
+        };
+    });
+
+
 var app = builder.Build();
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
 
 //Replaces 'dotnet ef database update' and automatically creates tables in database when entering 'docker compose up --build'   
 using (var scope = app.Services.CreateScope())
@@ -75,6 +86,14 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
-app.MapControllers();
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+}
 
+app.UseHttpsRedirection();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
 app.Run();

@@ -6,4 +6,5 @@ public class BookDb(DbContextOptions<BookDb> options) : DbContext(options)
 {
     public DbSet<Book> Books => Set<Book>();
     public DbSet<Quote> Quotes => Set<Quote>();
+    public DbSet<User> Users => Set<User>();
 }
