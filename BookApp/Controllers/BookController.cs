@@ -1,3 +1,4 @@
+using BookApp.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookApp.Controllers
@@ -8,42 +9,25 @@ namespace BookApp.Controllers
     public class BookController : ControllerBase
     {
 
-        static private List<Book> _books = new List<Book>
-        {
-            new Book
-            {
-                Id = 1,
-                Title = "Mormor hälsar och säger förlåt",
-                Author = "Fredrik Backman",
-                PublishDate = DateTime.Now,
-            },
-            new Book
-            {
-                Id = 2,
-                Title = "En man som heter Ove",
-                Author = "Fredrik Backman",
-                PublishDate = DateTime.Now,
-            },
-            new Book
-            {
-                Id = 3,
-                Title = "Folk med ångest",
-                Author = "Fredrik Backman",
-                PublishDate = DateTime.Now,
-            }
-        };
+        private readonly IBookService _service;
 
+        public BookController(IBookService service)
+        {
+            _service = service;
+        }
+        
         [HttpGet]
         // With ActionResult you define return of a status code 
         public ActionResult<List<Book>> GetBooks()
         {
-            return Ok(_books); 
+            return Ok(_service.GetAll()); 
         }
 
         [HttpGet("{id}")]
         public ActionResult<Book> GetBookById(int id)
         {
-            var book =  _books.FirstOrDefault(b => b.Id == id);
+            var book = _service.GetById(id);
+            
             if (book == null)
             {
                 return NotFound();
@@ -55,23 +39,21 @@ namespace BookApp.Controllers
         [HttpPost]
         public ActionResult<Book> AddBook(Book book)
         {
-            book.Id = _books.Max(b => b.Id) + 1;
-            _books.Add(book);
-            return CreatedAtAction(nameof(GetBookById), new { id = book.Id }, book);
+            var addedBook = _service.Create(book);
+            return CreatedAtAction(nameof(GetBookById), new { id = addedBook.Id }, addedBook);
         }
 
         [HttpPut("{id}")]
         public IActionResult UpdateBook(int id, Book updatedBook)
         {
-            var book =  _books.FirstOrDefault(b => b.Id == id);
-            if (book == null)
+            try
             {
-                return NotFound();
+             _service.Update(id, updatedBook);
             }
-            
-            book.Title = updatedBook.Title;
-            book.Author = updatedBook.Author;
-            book.PublishDate = updatedBook.PublishDate;
+            catch (KeyNotFoundException)
+            {
+               return NotFound(); 
+            }
             
             return NoContent();
         }
@@ -79,13 +61,14 @@ namespace BookApp.Controllers
         [HttpDelete("{id}")]
         public IActionResult DeleteBook(int id)
         {
-            var book =  _books.FirstOrDefault(b => b.Id == id);
-            if (book == null)
+            try
+            {
+                _service.Delete(id);
+            }
+            catch (KeyNotFoundException)
             {
                 return NotFound();
             }
-            
-            _books.Remove(book);
             return NoContent();
         }
     }

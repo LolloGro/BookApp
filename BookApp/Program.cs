@@ -1,19 +1,23 @@
+using BookApp;
 using BookApp.Models;
+using BookApp.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
-builder.Services.AddOpenApi();
 
 // Connection to database 
 builder.Services.AddDbContext<BookDb>(options => 
     options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
         new MySqlServerVersion(new Version(8, 0, 45)),
         mySqlOptions => mySqlOptions.EnableRetryOnFailure()));
+
+
+builder.Services.AddScoped<IBookService, BookService>();
+
+builder.Services.AddControllers();
+
+// Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+builder.Services.AddOpenApi();
 
 var app = builder.Build();
 
@@ -39,14 +43,26 @@ using (var scope = app.Services.CreateScope())
         try
         {
             db.Database.Migrate();
-            Console.WriteLine("Database migrated");
+
+            if (!db.Books.Any())
+            {
+                db.Books.AddRange(
+                    new Book
+                    {
+                        Title = "Mormor hälsar och säger förlåt", Author = "Fredrik Backman", PublishDate = DateTime.Now
+                    },
+                    new Book { Title = "En man som heter Ove", Author = "Fredrik Backman", PublishDate = DateTime.Now },
+                    new Book { Title = "Folk med ångest", Author = "Fredrik Backman", PublishDate = DateTime.Now });
+                db.SaveChanges();
+            }
+            Console.WriteLine("Database migrated"); 
             break;
         }
         catch (MySqlConnector.MySqlException)
-        {
-            Console.WriteLine("Database migration failed, retrying... in 5 seconds");
-            Thread.Sleep(5000);
-        }
+        { 
+            Console.WriteLine("Database migration failed, retrying... in 5 seconds"); 
+            Thread.Sleep(5000); 
+        } 
     }
 }
 

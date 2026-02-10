@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ###
-@idUpdate = 2
+@idUpdate = 5
 PUT {{BookApp_HostAddress}}/api/Book/{{idUpdate}}
 Content-Type: application/json
 
@@ -31,6 +31,6 @@ Content-Type: application/json
 }
 
 ###
-@idRemove = 3
+@idRemove = 5
 DELETE {{BookApp_HostAddress}}/api/Book/{{idRemove}}
 Accept: application/json
