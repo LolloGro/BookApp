@@ -1,29 +1,63 @@
 using BookApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookApp.Services;
 
-public class BookService(BookDb database) : IBookService
+public class BookService(BookDb database, ICurrentUserService currentUser) : IBookService
 { 
-    public List<Book> GetAll()
+    public async Task<List<BookDto>> GetAll()
     {
-        return database.Books.ToList();
+        return await database.Books
+            .Where(u => u.UserId == currentUser.UserId)
+            .Select(u => new BookDto
+            {
+                Id = u.Id,
+                Title = u.Title,
+                Author = u.Author,
+                PublishDate = u.PublishDate
+            }).ToListAsync(); 
     }
 
-    public Book? GetById(int id)
+    public async Task<BookDto?> GetById(int id)
     {
-        return database.Books.FirstOrDefault(b => b.Id == id);
+        return await database.Books
+            .Where(q => q.UserId == currentUser.UserId && q.Id == id)
+            .Select(q => new BookDto
+            {
+                Id = q.Id,
+                Title = q.Title,
+                Author = q.Author,
+                PublishDate = q.PublishDate
+            }).FirstOrDefaultAsync(); 
     }
 
-    public Book Create(Book book)
+    public async Task<BookDto> Create(BookDto bookDto)
     {
+        var book = new Book()
+        {
+            UserId = currentUser.UserId,
+            Title = bookDto.Title,
+            Author = bookDto.Author,
+            PublishDate = bookDto.PublishDate
+        };
+        
         database.Books.Add(book);
-        database.SaveChanges();
-        return book; 
+        await database.SaveChangesAsync();
+
+        var result = new BookDto()
+        {
+            Id = book.Id,
+            Title = book.Title,
+            Author = book.Author,
+            PublishDate = book.PublishDate
+        };
+        
+        return result; 
     }
 
-    public void Update(int id, Book updatedBook)
+    public async Task Update(int id, BookDto updatedBook)
     {
-        var book =  database.Books.FirstOrDefault(b => b.Id == id);
+        var book =  await database.Books.FirstOrDefaultAsync(b => b.Id == id && b.UserId == currentUser.UserId);
 
         if (book == null)
         {
@@ -33,12 +67,12 @@ public class BookService(BookDb database) : IBookService
         book.Title = updatedBook.Title;
         book.Author = updatedBook.Author;
         book.PublishDate = updatedBook.PublishDate;
-        database.SaveChanges();
+        await database.SaveChangesAsync();
     }
 
-    public void Delete(int id)
+    public async Task Delete(int id)
     {
-        var book =  database.Books.FirstOrDefault(b => b.Id == id);
+        var book = await database.Books.FirstOrDefaultAsync(b => b.Id == id && b.UserId == currentUser.UserId);
 
         if (book == null)
         {
@@ -46,6 +80,6 @@ public class BookService(BookDb database) : IBookService
         }
         
         database.Books.Remove(book);
-        database.SaveChanges();
+        await database.SaveChangesAsync();
     }
 }

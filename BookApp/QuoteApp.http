@@ -1,26 +1,31 @@
 @BookApp_HostAddress = http://localhost:5249
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsImV4cCI6MTc3MDgxMzk5MywiaXNzIjoiQm9va0FwcCIsImF1ZCI6IkJvb2tBcHBVc2VycyJ9.ekQZHE4o365LEOxWzuzgkHje_0HfaU8Cf65EoFGCq54
 
 GET {{BookApp_HostAddress}}/api/Quote
+Authorization: Bearer {{token}}
 Accept: application/json
 
 ###
 
-@id = 1
+@id = 3
 GET {{BookApp_HostAddress}}/api/Quote/{{id}}
+Authorization: Bearer {{token}}
 Accept: application/json
 
 ###
 
 POST {{BookApp_HostAddress}}/api/Quote
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-"quoteText": "Alla människor bär på ett djup, men inte alla vågar dyka"
+"quoteText": "Carpe diem"
 }
 
 ###
-@updateId = 2
+@updateId = 6
 PUT {{BookApp_HostAddress}}/api/Quote/{{updateId}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -28,8 +33,9 @@ Content-Type: application/json
 }
 
 ###
- @deleteId = 2
+ @deleteId = 6
 DELETE {{BookApp_HostAddress}}/api/Quote/{{deleteId}}
+Authorization: Bearer {{token}}
 Accept: application/json
 
 ###

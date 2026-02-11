@@ -2,9 +2,9 @@ namespace BookApp.Services;
 
 public interface IBookService
 {
-    List<Book> GetAll();
-    Book? GetById(int id);
-    Book Create(Book book);
-    void Update(int id, Book book);
-    void Delete(int id);
+    Task<List<BookDto>> GetAll();
+    Task<BookDto?> GetById(int id);
+    Task<BookDto> Create(BookDto book);
+    Task Update(int id, BookDto book);
+    Task Delete(int id);
 }

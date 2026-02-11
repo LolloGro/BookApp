@@ -1,16 +1,20 @@
 @BookApp_HostAddress = http://localhost:5249
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsImV4cCI6MTc3MDgxMzk5MywiaXNzIjoiQm9va0FwcCIsImF1ZCI6IkJvb2tBcHBVc2VycyJ9.ekQZHE4o365LEOxWzuzgkHje_0HfaU8Cf65EoFGCq54
 
 GET {{BookApp_HostAddress}}/api/Book
+Authorization: Bearer {{token}}
 Accept: application/json
 
 ###
 @id =1
 GET {{BookApp_HostAddress}}/api/Book/{{id}}
+Authorization: Bearer {{token}}
 Accept: application/json
 
 ###
 
 POST {{BookApp_HostAddress}}/api/Book
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -20,8 +24,9 @@ Content-Type: application/json
 }
 
 ###
-@idUpdate = 5
+@idUpdate = 1
 PUT {{BookApp_HostAddress}}/api/Book/{{idUpdate}}
+Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
@@ -31,6 +36,7 @@ Content-Type: application/json
 }
 
 ###
-@idRemove = 5
+@idRemove = 1
 DELETE {{BookApp_HostAddress}}/api/Book/{{idRemove}}
+Authorization: Bearer {{token}}
 Accept: application/json

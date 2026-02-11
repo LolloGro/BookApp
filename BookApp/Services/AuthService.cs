@@ -63,6 +63,8 @@ public class AuthService(BookDb database, IConfiguration configuration) : IAuthS
         };
         
         var token = new JwtSecurityToken(
+            issuer: configuration["Jwt:Issuer"],
+            audience:configuration["Jwt:Audience"],
             claims: claims,
             expires: DateTime.UtcNow.AddHours(3),
             signingCredentials: credentials

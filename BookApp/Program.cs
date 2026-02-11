@@ -11,6 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IBookService, BookService>();
 builder.Services.AddScoped<IQuoteService, QuoteService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ICurrentUserService, CurrentUserService>();
+
+builder.Services.AddHttpContextAccessor();
 
 // Connection to database 
 builder.Services.AddDbContext<BookDb>(options => 
@@ -30,13 +33,16 @@ builder.Services.AddAuthentication(auth =>
     })
     .AddJwtBearer(opt =>
     {
-        var key = Encoding.ASCII.GetBytes(builder.Configuration["Jwt:Key"]);
+        var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
         opt.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key),
-            ValidateIssuer = false,
-            ValidateAudience = false
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+            ValidateIssuer = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidateAudience = true,
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            ValidateLifetime = true,
         };
     });
 
@@ -55,25 +61,6 @@ using (var scope = app.Services.CreateScope())
         try
         {
             db.Database.Migrate();
-
-            if (!db.Books.Any())
-            {
-                db.Books.AddRange(
-                    new Book
-                    {
-                        Title = "Mormor hälsar och säger förlåt", Author = "Fredrik Backman", PublishDate = DateTime.Now
-                    },
-                    new Book { Title = "En man som heter Ove", Author = "Fredrik Backman", PublishDate = DateTime.Now },
-                    new Book { Title = "Folk med ångest", Author = "Fredrik Backman", PublishDate = DateTime.Now });
-                db.SaveChanges();
-            }
-
-            if (!db.Quotes.Any())
-            {
-                db.Quotes.AddRange(
-                    new Quote { QuoteText = "Ta igen skit" });
-                db.SaveChanges();
-            }
             
             Console.WriteLine("Database migrated"); 
             break;

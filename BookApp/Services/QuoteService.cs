@@ -1,47 +1,77 @@
 using BookApp.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookApp.Services;
 
-public class QuoteService(BookDb database) : IQuoteService
+public class QuoteService(BookDb database, ICurrentUserService currentUser) : IQuoteService
 
 {
-    public List<Quote> GetAll()
+    public async Task<List<QuoteDto>> GetAll()
     {
-        return database.Quotes.ToList();
+        return await database.Quotes
+            .Where(u => u.UserId == currentUser.UserId)
+            .Select(quote => new QuoteDto
+            {
+                Id = quote.Id,
+                QuoteText = quote.QuoteText
+            }).ToListAsync();
     }
 
-    public Quote? GetById(int id)
+    //returnerar null om boken tillhör någon annan eller inte finns 
+    public async Task<QuoteDto?> GetById(int id)
     {
-        return database.Quotes.FirstOrDefault(q => q.Id == id);
+        return await  database.Quotes
+            .Where(q => q.UserId == currentUser.UserId && q.Id == id)
+            .Select(quote => new QuoteDto
+            {
+                Id = quote.Id,
+                QuoteText = quote.QuoteText
+            }
+            ).FirstOrDefaultAsync();
     }
 
-    public Quote Create(Quote quote)
+    public async Task<QuoteDto> Create(QuoteDto quoteDto)
     {
+        var quote = new Quote
+        {
+            UserId = currentUser.UserId,
+            QuoteText = quoteDto.QuoteText
+        };
+        
         database.Quotes.Add(quote);
-        database.SaveChanges();
-        return quote;
+        await database.SaveChangesAsync();
+
+        var result = new QuoteDto
+        {
+            Id = quote.Id,
+            QuoteText = quote.QuoteText
+        }; 
+        
+        return result;
     }
 
-    public void Update(int id, Quote updatedQuote)
+    public async Task Update(int id, QuoteDto updatedQuote)
     {
-        var quote = database.Quotes.FirstOrDefault(q => q.Id == id);
+        var quote = await database.Quotes.FirstOrDefaultAsync(q => q.Id == id && q.UserId == currentUser.UserId);
+        
         if (quote == null)
         {
             throw new KeyNotFoundException();
         }
-        quote.QuoteText = updatedQuote.QuoteText;
-        database.SaveChanges();
+        
+        quote.QuoteText =  updatedQuote.QuoteText;
+        await database.SaveChangesAsync();
     }
 
-    public void Delete(int id)
+    public async Task Delete(int id)
     {
-        var quote = database.Quotes.FirstOrDefault(q => q.Id == id);
+        var quote = await database.Quotes.FirstOrDefaultAsync(q => q.Id == id && q.UserId == currentUser.UserId);
 
         if (quote == null)
         {
             throw new KeyNotFoundException();
         }
         database.Quotes.Remove(quote);
-        database.SaveChanges();
+        await database.SaveChangesAsync();
     }
 }

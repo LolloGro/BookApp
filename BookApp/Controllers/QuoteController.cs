@@ -1,22 +1,24 @@
 using BookApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookApp.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class QuoteController(IQuoteService service) : ControllerBase
     {
         [HttpGet]
-        public ActionResult<List<Quote>> GetQuotes()
+        public async Task<ActionResult<List<QuoteDto>>> GetQuotes()
         {
-            return Ok(service.GetAll());
+            return Ok(await service.GetAll());
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Quote> GetQuoteById(int id)
+        public async Task<ActionResult<QuoteDto>> GetQuoteById(int id)
         {
-            var quote = service.GetById(id);
+            var quote = await service.GetById(id);
             if (quote == null)
             {
                 return NotFound();
@@ -25,18 +27,18 @@ namespace BookApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Quote> AddQuote(Quote quote)
+        public async Task<ActionResult<QuoteDto>> AddQuote(QuoteDto quote)
         {
-            var addedQuote = service.Create(quote);
+            var addedQuote = await service.Create(quote);
             return CreatedAtAction(nameof(GetQuoteById), new { id = addedQuote.Id }, addedQuote);
         }
 
         [HttpPut("{id}")]
-        public ActionResult UpdateQuote(int id, Quote quote)
+        public async Task<ActionResult> UpdateQuote(int id, QuoteDto quote)
         {
             try
             {
-                service.Update(id, quote);
+               await service.Update(id, quote);
             }
             catch (KeyNotFoundException)
             {
@@ -47,11 +49,11 @@ namespace BookApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteQuote(int id)
+        public async Task<IActionResult> DeleteQuote(int id)
         {
             try
             {
-                service.Delete(id);
+                await service.Delete(id);
             }
             catch (KeyNotFoundException)
             {

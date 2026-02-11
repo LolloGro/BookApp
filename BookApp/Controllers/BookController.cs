@@ -1,24 +1,26 @@
 using BookApp.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookApp.Controllers
 {
     //ApiController validates 
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class BookController(IBookService service) : ControllerBase
     {
         [HttpGet]
         // With ActionResult you define return of a status code 
-        public ActionResult<List<Book>> GetBooks()
+        public async Task<ActionResult<List<BookDto>>> GetBooks()
         {
-            return Ok(service.GetAll()); 
+            return Ok(await service.GetAll()); 
         }
 
         [HttpGet("{id}")]
-        public ActionResult<Book> GetBookById(int id)
+        public async Task<ActionResult<BookDto?>> GetBookById(int id)
         {
-            var book = service.GetById(id);
+            var book = await service.GetById(id);
             
             if (book == null)
             {
@@ -29,18 +31,18 @@ namespace BookApp.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Book> AddBook(Book book)
+        public async Task<ActionResult<BookDto>> AddBook(BookDto book)
         {
-            var addedBook = service.Create(book);
+            var addedBook = await service.Create(book);
             return CreatedAtAction(nameof(GetBookById), new { id = addedBook.Id }, addedBook);
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateBook(int id, Book updatedBook)
+        public async Task<IActionResult> UpdateBook(int id, BookDto updatedBook)
         {
             try
             {
-             service.Update(id, updatedBook);
+             await service.Update(id, updatedBook);
             }
             catch (KeyNotFoundException)
             {
@@ -51,11 +53,11 @@ namespace BookApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteBook(int id)
+        public async Task<IActionResult> DeleteBook(int id)
         {
             try
             {
-                service.Delete(id);
+                await service.Delete(id);
             }
             catch (KeyNotFoundException)
             {
