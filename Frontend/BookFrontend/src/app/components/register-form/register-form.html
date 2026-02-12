@@ -1,0 +1,35 @@
+<div class="d-flex flex-column p-3">
+  <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="email" aria-describedby="emailHelp" formControlName="email">
+    </div>
+
+    <div class="mb-3">
+      <label for="username" class="form-label">Username</label>
+      <input type="text" class="form-control" id="username" formControlName="username">
+    </div>
+
+    <label for="password" class="form-label">Password</label>
+    <input type="password" id="password" class="form-control" aria-describedby="passwordHelpBlock" formControlName="password">
+    <div id="passwordHelpBlock" class="form-text">
+      Your password must be at least 6 characters long.
+    </div>
+
+    <button type="submit" class="btn btn-primary" [disabled]="registerForm.invalid">Register</button>
+  </form>
+
+  @if (loading()){
+    <div class="spinner-border mt-2" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  }
+
+  @if (errorMessage()){
+    <div class="mt-2 text-danger">{{errorMessage()}}</div>
+  }
+
+</div>
+
+

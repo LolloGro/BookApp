@@ -32,7 +32,7 @@ namespace BookApp.Controllers
             }
             catch (Exception e)
             {
-                return Unauthorized(new {meassage = e.Message});
+                return Unauthorized(new {message = e.Message});
             }
         }
         
