@@ -1,12 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
 import {ReactiveFormsModule, Validators, NonNullableFormBuilder} from '@angular/forms';
 import {LoginService} from '../../services/login.service';
-import {Router} from '@angular/router';
+import {Router, RouterModule} from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './login-form.html',
   styleUrl: './login-form.css',
 })
@@ -39,16 +39,11 @@ private router = inject(Router);
     this.loginService.loginUser(username, password)
     .subscribe(
       {
-        next: result => {
-          console.log("login result", result);
-          this.router.navigate(['/']);
-        },
+        next: () => this.router.navigate(['/']),
         error: err => {
-          console.log("login failed", err);
-          this.errorMessage.set(err.error || 'Login Failed');
+          this.errorMessage.set(err.error?.message || 'Login failed');
           this.loading.set(false);
         }
       });
   }
-
 }
