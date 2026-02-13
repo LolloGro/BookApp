@@ -39,7 +39,7 @@ private router = inject(Router);
     this.loginService.loginUser(username, password)
     .subscribe(
       {
-        next: () => this.router.navigate(['/']),
+        next: () => this.router.navigate(['/books']),
         error: err => {
           this.errorMessage.set(err.error?.message || 'Login failed');
           this.loading.set(false);
