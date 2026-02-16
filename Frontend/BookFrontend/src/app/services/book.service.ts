@@ -31,7 +31,6 @@ export class BookService {
       .subscribe(books => this.bookSubject.next(books));
   }
 
-  //use?
   getBookByID(id :number):Observable<BookType>{
     return this.http.get<BookType>(`${this.api}/${id}`);
   }
@@ -40,9 +39,8 @@ export class BookService {
     return this.http.post<BookType>(`${this.api}`, {title, author, publishDate});
   }
 
-  //Add id
-  updateBook({title, author, publishDate}: CreateBook):Observable<BookType> {
-    return this.http.put<BookType>(`${this.api}`, {title, author, publishDate});
+  updateBook(id: number, {title, author, publishDate}: CreateBook):Observable<BookType> {
+    return this.http.put<BookType>(`${this.api}/${id}`, {title, author, publishDate});
   }
 
   deleteBook(id:number){
