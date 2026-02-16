@@ -1,7 +1,7 @@
 import {Component, inject, signal, OnInit} from '@angular/core';
 import {BookService} from '../../services/book.service';
 import {BookType} from '../../services/book.service';
-import {RouterModule} from '@angular/router';
+import {RouterModule, Router} from '@angular/router';
 import {DatePipe, AsyncPipe} from '@angular/common';
 
 
@@ -18,7 +18,7 @@ export class BookCard implements OnInit {
   errorMessage = signal('');
 
 private bookService = inject(BookService);
-private datePipe = inject(DatePipe);
+private router = inject(Router);
 
 books$ = this.bookService.books$;
 
@@ -37,11 +37,11 @@ ngOnInit() {
 }
 
 updateBook(book: BookType) {
-  console.log("Open edit module", book);
+  this.router.navigate(['book/update', book.id]);
 }
 
 formatDate(date: string) {
-  return this.datePipe.transform(date, 'yyyy-MM-dd');
+  return date.split('T')[0];
 }
 
 }

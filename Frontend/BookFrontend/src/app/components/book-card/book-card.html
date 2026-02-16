@@ -4,7 +4,7 @@
   @if((books$ | async)?.length === 0){
     <p>No books in library yet</p>
     <p>Do you want to add a book?</p>
-    <a class="link-opacity-100" [routerLink]="['/book']">Create account</a>
+    <a class="link-opacity-100" [routerLink]="['/book/create']">Create account</a>
   }
 
   @for (book of books$ | async; track book.id){
@@ -13,8 +13,8 @@
       <div class="card-body">
         <h5 class="card-title">{{book.author}}</h5>
         <p class="card-text">{{book.title}}</p>
-        <p class="card-text">({{formatDate(book.publishDate)}})</p>
-        <button type="button" class="btn btn-primary" (click)="updateBook(book)">Update</button>
+        <p class="card-text">{{formatDate(book.publishDate)}}</p>
+        <button type="button" class="btn btn-primary me-2" (click)="updateBook(book)">Update</button>
         <button type="button" class="btn btn-primary" (click)="deleteBook(book)">Delete</button>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal} from '@angular/core';
 import {ReactiveFormsModule, Validators, NonNullableFormBuilder} from '@angular/forms';
 import {BookService} from '../../services/book.service';
 import {Router, RouterModule} from '@angular/router';
@@ -36,7 +36,7 @@ export class BookForm {
     const {title, author, publishDate} = this.bookForm.getRawValue();
 
     this.bookService.createBook({title, author, publishDate}).subscribe({
-      next: () => this.router.navigate(['/books']),
+      next: () => this.router.navigate(['/book']),
       error: err => {
         this.errorMessage.set(err.error?.message || 'Creating of book failed');
         this.loading.set(false);
