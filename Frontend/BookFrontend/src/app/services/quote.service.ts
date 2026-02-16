@@ -6,7 +6,7 @@ export interface Quote{
   quoteText: string;
 }
 export interface QuoteType{
-  id: Number,
+  id: number,
   quoteText:string,
 }
 
@@ -61,7 +61,7 @@ export class QuoteService {
   }
 
   getQuoteById(id: number){
-    this.http.get<Quote>(`${this.api}/${id}`);
+    return this.http.get<Quote>(`${this.api}/${id}`);
   }
 
   createQuote(quote: Quote): Observable<QuoteType>{

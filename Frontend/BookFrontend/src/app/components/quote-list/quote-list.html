@@ -10,8 +10,8 @@
   <div class="card mb-2" style="width: 18rem;">
     <div class="card-body">
       <p class="card-text">{{quote.quoteText}}</p>
-      <button type="button" class="btn btn-primary me-2" (click)="updateQuote()">Update</button>
-      <button type="button" class="btn btn-primary" (click)="deleteQuote()">Delete</button>
+      <button type="button" class="btn btn-primary me-2" (click)="updateQuote(quote)">Update</button>
+      <button type="button" class="btn btn-primary" (click)="deleteQuote(quote)">Delete</button>
     </div>
   </div>
 }

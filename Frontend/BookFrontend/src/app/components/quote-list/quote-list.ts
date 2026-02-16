@@ -1,6 +1,6 @@
 import { Component, inject, signal, OnInit } from '@angular/core';
-import {QuoteService} from '../../services/quote.service';
-import {RouterModule} from '@angular/router';
+import {QuoteService, QuoteType} from '../../services/quote.service';
+import {RouterModule, Router} from '@angular/router';
 import {AsyncPipe} from '@angular/common';
 import {combineLatest, map} from 'rxjs';
 
@@ -15,12 +15,16 @@ import {combineLatest, map} from 'rxjs';
 })
 export class QuoteList implements OnInit {
   private quoteService = inject(QuoteService);
+  private router = inject(Router);
+
   quotes$ = this.quoteService.quotes$;
   totalCount$ = this.quoteService.totalCount$;
   page$ = this.quoteService.page$;
   pageSize$ = this.quoteService.pageSize$;
 
   page = 1;
+
+  errorMessage = signal('');
 
   pageInfo$ =combineLatest([this.page$, this.totalCount$, this.pageSize$]).pipe(
     map(([page, totalCount, pageSize]) => ({
@@ -44,12 +48,17 @@ export class QuoteList implements OnInit {
    this.quoteService.getPreviousQuote();
   }
 
-  updateQuote() {
-    console.log("Update")
+  updateQuote(quote: QuoteType) {
+    this.router.navigate(['quote/update', quote.id]);
   }
 
-  deleteQuote() {
-    console.log("Delete");
+  deleteQuote(quote: QuoteType) {
+    if(!confirm('Are you sure you want to delete this book?')) return;
+    this.quoteService.deleteQuote(quote.id).subscribe({
+      error: err => {
+        this.errorMessage.set(err.error?.message || 'Failed to delete quote');
+      }
+    });
   }
 
 }

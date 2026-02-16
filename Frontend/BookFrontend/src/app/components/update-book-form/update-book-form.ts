@@ -30,7 +30,7 @@ export class UpdateBookForm implements OnInit {
     this.bookId = Number(this.route.snapshot.paramMap.get('id'));
 
     this.bookService.getBookByID(this.bookId)
-      .subscribe(book => { this. updateForm.patchValue({
+      .subscribe(book => { this.updateForm.patchValue({
         title: book.title,
         author: book.author,
         publishDate: book.publishDate.split('T')[0]
@@ -40,7 +40,6 @@ export class UpdateBookForm implements OnInit {
 
   updateBook(){
     if(this.updateForm.invalid){
-      this.updateForm.markAllAsTouched();
       return;
     }
 

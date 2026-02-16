@@ -1,0 +1,8 @@
+<h2>Update a quote</h2>
+<form [formGroup]="updateForm" (ngSubmit)="updateQuote()">
+  <div class="mb-3">
+    <label for="quote" class="form-label">Quote:</label>
+    <textarea class="form-control" id="quote" rows="3" required formControlName="quoteText"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="updateForm.invalid">Update quote</button>
+</form>
