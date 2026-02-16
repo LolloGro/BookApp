@@ -1,7 +1,7 @@
 @BookApp_HostAddress = http://localhost:5249
-@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsImV4cCI6MTc3MDgxMzk5MywiaXNzIjoiQm9va0FwcCIsImF1ZCI6IkJvb2tBcHBVc2VycyJ9.ekQZHE4o365LEOxWzuzgkHje_0HfaU8Cf65EoFGCq54
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidGVzdCIsImV4cCI6MTc3MTI1NTgzNiwiaXNzIjoiQm9va0FwcCIsImF1ZCI6IkJvb2tBcHBVc2VycyJ9.ryRDRugWv-YasJ4WEteAR34S1c2-CMD6V_t5dTWlotc
 
-GET {{BookApp_HostAddress}}/api/Quote
+GET {{BookApp_HostAddress}}/api/Quote?page=1&pageSize=5
 Authorization: Bearer {{token}}
 Accept: application/json
 
@@ -19,7 +19,7 @@ Authorization: Bearer {{token}}
 Content-Type: application/json
 
 {
-"quoteText": "Carpe diem"
+"quoteText": "Ta ingen skit"
 }
 
 ###

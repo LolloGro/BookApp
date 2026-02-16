@@ -6,15 +6,31 @@ namespace BookApp.Services;
 public class QuoteService(BookDb database, ICurrentUserService currentUser) : IQuoteService
 
 {
-    public async Task<List<QuoteDto>> GetAll()
+    public async Task<PaginationResult<QuoteDto>> GetAll(Pagination pagination)
     {
-        return await database.Quotes
+        var query = database.Quotes
             .Where(u => u.UserId == currentUser.UserId)
-            .Select(quote => new QuoteDto
-            {
-                Id = quote.Id,
-                QuoteText = quote.QuoteText
-            }).ToListAsync();
+            .AsQueryable();
+        
+        var totalQuote = await query.CountAsync();
+        
+        var quotes = await query
+            .OrderBy(q => q.Id)
+            .Skip((pagination.Page -1) * pagination.PageSize)
+            .Take(pagination.PageSize)
+            .ToListAsync();
+
+        var convertedQuotes = quotes.Select(q => new QuoteDto
+        {
+            Id = q.Id,
+            QuoteText = q.QuoteText
+        }).ToList();
+
+        return new PaginationResult<QuoteDto>
+        {
+            ListItems = convertedQuotes,
+            TotalCount = totalQuote
+        };
     }
 
     //returnerar null om boken tillhör någon annan eller inte finns 

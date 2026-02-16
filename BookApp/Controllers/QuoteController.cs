@@ -1,3 +1,4 @@
+using BookApp.Models;
 using BookApp.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,9 +11,9 @@ namespace BookApp.Controllers
     public class QuoteController(IQuoteService service) : ControllerBase
     {
         [HttpGet]
-        public async Task<ActionResult<List<QuoteDto>>> GetQuotes()
+        public async Task<ActionResult<PaginationResult<QuoteDto>>> GetQuotes([FromQuery] Pagination pagination)
         {
-            return Ok(await service.GetAll());
+            return Ok(await service.GetAll(pagination));
         }
 
         [HttpGet("{id}")]
