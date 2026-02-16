@@ -1,0 +1,8 @@
+<h2>Create a quote</h2>
+<form [formGroup]="quoteForm" (ngSubmit)="onCreateQuote()">
+  <div class="mb-3">
+    <label for="quote" class="form-label">Quote:</label>
+    <textarea class="form-control" id="quote" rows="3" required formControlName="quoteText"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary" [disabled]="quoteForm.invalid">Add quote</button>
+</form>

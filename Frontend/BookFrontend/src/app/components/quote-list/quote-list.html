@@ -1,0 +1,35 @@
+<p>quote-list works!</p>
+
+@if((quotes$ | async)?.length === 0){
+  <p>No quotes added yet</p>
+  <p>Do you like to add a quot?</p>
+  <a class="link-opacity-100" [routerLink]="['/book/create']">Create account</a>
+}
+
+@for (quote of quotes$ | async; track quote.id){
+  <div class="card mb-2" style="width: 18rem;">
+    <div class="card-body">
+      <p class="card-text">{{quote.quoteText}}</p>
+      <button type="button" class="btn btn-primary me-2" (click)="updateQuote()">Update</button>
+      <button type="button" class="btn btn-primary" (click)="deleteQuote()">Delete</button>
+    </div>
+  </div>
+}
+
+@if(pageInfo$ | async; as info){
+  <nav aria-label="Page">
+    <ul class="pagination">
+      <li class="page-item">
+        <button type="button" class="btn btn-primary" (click)="previousPage()" [disabled]="info.page === 1">Previous</button>
+      </li>
+      <li class="page-item"><p>{{info.page}}</p></li>
+      <li class="page-item"><p>of {{info.totalPages}}</p></li>
+      <li class="page-item">
+        <button type="button" class="btn btn-primary" (click)="nextPage()" [disabled]="info.page === info.totalPages">Next</button>
+      </li>
+    </ul>
+  </nav>
+}
+
+
+
