@@ -15,18 +15,17 @@ import {DatePipe, AsyncPipe} from '@angular/common';
 })
 export class BookCard implements OnInit {
 
-  errorMessage = signal('');
-
 private bookService = inject(BookService);
 private router = inject(Router);
 
+errorMessage = signal("");
 books$ = this.bookService.books$;
 
 ngOnInit() {
   this.bookService.getAllBooks();
 }
 
-  deleteBook(book: BookType) {
+deleteBook(book: BookType) {
   if(!confirm('Are you sure you want to delete this book?')) return;
 
   this.bookService.deleteBook(book.id).subscribe({
