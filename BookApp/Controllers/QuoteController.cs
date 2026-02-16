@@ -13,6 +13,8 @@ namespace BookApp.Controllers
         [HttpGet]
         public async Task<ActionResult<PaginationResult<QuoteDto>>> GetQuotes([FromQuery] Pagination pagination)
         {
+            pagination.CheckPagination();
+            
             return Ok(await service.GetAll(pagination));
         }
 

@@ -29,7 +29,9 @@ public class QuoteService(BookDb database, ICurrentUserService currentUser) : IQ
         return new PaginationResult<QuoteDto>
         {
             ListItems = convertedQuotes,
-            TotalCount = totalQuote
+            TotalCount = totalQuote,
+            Page = pagination.Page,
+            PageSize = pagination.PageSize
         };
     }
 
