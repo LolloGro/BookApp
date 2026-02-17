@@ -1,1 +1,23 @@
-<h2>Welcome to Book's library</h2>
+@if(isLoggedIn$ | async){
+  <div class="home">
+    <h2 class="mb-4">Welcome back to Book's library</h2>
+    <div class="home-text">
+      <p class="text-center">Here you can gather all your favorite books <span><i class="fa-solid fa-book"></i></span> and quotes <span><i class="fa-solid fa-quote-left"></i></span> that mean the world for you</p>
+    </div>
+    <img src="/images/yolo.bmp" class="img-fluid mt-4 mb-2 rounded-circle" alt="old books and a open book with the text yolo">
+  </div>
+}@else{
+  <div class="home">
+    <h2 class="mb-4">Welcome to Book's library</h2>
+    <div class="home-text">
+      <p class="text-center">Here you can gather all your favorite books <span><i class="fa-solid fa-book"></i></span> and quotes <span><i class="fa-solid fa-quote-left"></i></span> that mean the world for you</p>
+      <a class="link-opacity-100" [routerLink]="['/login']">Login to start your collection</a>
+    </div>
+    <img src="/images/yolo.bmp" class="img-fluid mt-4 mb-2 rounded-circle" alt="old books and a open book with the text yolo">
+  </div>
+}
+
+
+
+
+
