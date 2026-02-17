@@ -1,6 +1,6 @@
+<h2 class="text-center mb-4">Book's in library</h2>
 
-  <h2>Book's in library</h2>
-
+<div class="book-card">
   @if((books$ | async)?.length === 0){
     <p>No books in library yet</p>
     <p>Do you want to add a book?</p>
@@ -13,7 +13,7 @@
       <div class="card-body">
         <h5 class="card-title">{{book.author}}</h5>
         <p class="card-text">{{book.title}}</p>
-        <p class="card-text">{{formatDate(book.publishDate)}}</p>
+        <p class="card-text">Published: {{formatDate(book.publishDate)}}</p>
         <button type="button" class="btn btn-primary me-2" (click)="updateBook(book)">Update</button>
         <button type="button" class="btn btn-primary" (click)="deleteBook(book)">Delete</button>
       </div>
@@ -23,5 +23,7 @@
       <div class="mt-2 text-danger">{{errorMessage()}}</div>
     }
   }
+</div>
+
 
 

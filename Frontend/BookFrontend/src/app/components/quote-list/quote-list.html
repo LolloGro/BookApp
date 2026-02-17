@@ -1,35 +1,42 @@
-<p>quote-list works!</p>
+<div class="quotes">
 
-@if((quotes$ | async)?.length === 0){
-  <p>No quotes added yet</p>
-  <p>Do you like to add a quot?</p>
-  <a class="link-opacity-100" [routerLink]="['/book/create']">Create account</a>
-}
+  <h2 class="mb-4">Quotes</h2>
 
-@for (quote of quotes$ | async; track quote.id){
-  <div class="card mb-2" style="width: 18rem;">
-    <div class="card-body">
-      <p class="card-text">{{quote.quoteText}}</p>
-      <button type="button" class="btn btn-primary me-2" (click)="updateQuote(quote)">Update</button>
-      <button type="button" class="btn btn-primary" (click)="deleteQuote(quote)">Delete</button>
+  @if((quotes$ | async)?.length === 0){
+    <p>No quotes added yet</p>
+    <p>Do you like to add a quot?</p>
+    <a class="link-opacity-100" [routerLink]="['/book/create']">Create account</a>
+  }
+
+  @for (quote of quotes$ | async; track quote.id){
+    <div class="card mb-2" style="width: 18rem;">
+      <div class="card-body">
+        <p class="card-text">{{quote.quoteText}}</p>
+        <button type="button" class="btn btn-primary me-2" (click)="updateQuote(quote)">Update</button>
+        <button type="button" class="btn btn-primary" (click)="deleteQuote(quote)">Delete</button>
+      </div>
     </div>
-  </div>
-}
+  }
 
-@if(pageInfo$ | async; as info){
-  <nav aria-label="Page">
-    <ul class="pagination">
-      <li class="page-item">
-        <button type="button" class="btn btn-primary" (click)="previousPage()" [disabled]="info.page === 1">Previous</button>
-      </li>
-      <li class="page-item"><p>{{info.page}}</p></li>
-      <li class="page-item"><p>of {{info.totalPages}}</p></li>
-      <li class="page-item">
-        <button type="button" class="btn btn-primary" (click)="nextPage()" [disabled]="info.page === info.totalPages">Next</button>
-      </li>
-    </ul>
-  </nav>
-}
+  @if(pageInfo$ | async; as info){
+    <nav aria-label="Page">
+      <div class="flex flex-row justify-content-center align-items-center mt-2">
+        <ul class="pagination">
+          <li class="page-item">
+            <button type="button" class="btn btn-primary" (click)="previousPage()" [disabled]="info.page === 1"><i class="fa-solid fa-angle-left"></i></button>
+          </li>
+            <li class="page-item m-1"><p>{{info.page}} of {{info.totalPages}}</p></li>
+          <li class="page-item">
+            <button type="button" class="btn btn-primary" (click)="nextPage()" [disabled]="info.page === info.totalPages"><i class="fa-solid fa-angle-right"></i></button>
+          </li>
+        </ul>
+      </div>
+    </nav>
+  }
+
+</div>
+
+
 
 
 
