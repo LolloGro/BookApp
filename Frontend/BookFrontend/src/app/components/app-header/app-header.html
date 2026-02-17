@@ -1,20 +1,31 @@
-<header>
+<header class="sticky-top ">
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
+
       <a class="navbar-brand" [routerLink]="['/']">Book's</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
+
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+          @if(isLoggedIn$ | async){
+            <li class="nav-item">
+              <a class="nav-link" href="" (click)="onLogout()">Logout</a>
+            </li>
+          } @else {
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/login']">Login</a>
+            </li>
+          }
+
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" [routerLink]="['/']">Home</a>
+            <a class="nav-link" [routerLink]="['/']">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/login']">Login</a>
-          </li>
+
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" [class.disabled]="!(isLoggedIn$ | async)" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Books
             </a>
             <ul class="dropdown-menu">
@@ -22,8 +33,9 @@
               <li><a class="dropdown-item" [routerLink]="['/book']">View books</a></li>
             </ul>
           </li>
+
           <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle" [class.disabled]="!(isLoggedIn$ | async)" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Quotes
             </a>
             <ul class="dropdown-menu">
@@ -31,9 +43,17 @@
               <li><a class="dropdown-item" [routerLink]="['/quote']">View quotes</a></li>
             </ul>
           </li>
-          <li class="nav-item">
-            <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-          </li>
+
+          <div class="text-end">
+            <button class="btn btn-secondary" (click)="toggleTheme()">
+              @if(themeService.isDarkMode()){
+                <i class="fa-regular fa-moon"></i>
+              } @else {
+                <i class="fa-regular fa-sun"></i>
+              }
+            </button>
+          </div>
+
         </ul>
       </div>
     </div>

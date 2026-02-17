@@ -24,6 +24,10 @@ export const routes: Routes = [
     component: Register
   },
   {
+    path: 'logout',
+    component: Home
+  },
+  {
     path: 'book',
     component: ViewBooks
   },
