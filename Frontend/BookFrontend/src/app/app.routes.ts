@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
-import {Login} from './pages/login/login';
 import {Home} from './pages/home/home';
-import {Register} from './pages/register/register';
-import {ViewBooks} from './pages/view-books/view-books';
 import {UpdateBookForm} from './components/update-book-form/update-book-form';
 import {BookForm} from './components/book-form/book-form';
 import {QuoteForm} from './components/quote-form/quote-form';
 import {QuoteList} from './components/quote-list/quote-list';
 import {UpdateQuoteForm} from './components/update-quote-form/uppdate-quote-form';
+import {LoginForm} from './components/login-form/login-form';
+import {RegisterForm} from './components/register-form/register-form';
+import {BookCard} from './components/book-card/book-card';
 
 
 export const routes: Routes = [
@@ -17,11 +17,11 @@ export const routes: Routes = [
   },
   {
     path: 'login',
-    component: Login
+    component: LoginForm
   },
   {
     path: 'register',
-    component: Register
+    component: RegisterForm
   },
   {
     path: 'logout',
@@ -29,7 +29,7 @@ export const routes: Routes = [
   },
   {
     path: 'book',
-    component: ViewBooks
+    component: BookCard
   },
   {
     path: 'book/create',
