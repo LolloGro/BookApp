@@ -10,7 +10,7 @@ RUN npm run build -- --configuration production
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS dotnet-build
 WORKDIR /src
 COPY BookApp/ ./BookApp
-COPY --from=angular-build /app/dist/browser ./BookApp/wwwroot
+COPY --from=angular-build /app/dist/*/browser ./BookApp/wwwroot
 WORKDIR /src/BookApp
 RUN dotnet restore
 RUN dotnet publish -c Release -o /app/publish
