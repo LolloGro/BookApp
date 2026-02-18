@@ -25,7 +25,7 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-var jwtKey = builder.Configuration["JwtKey"] ?? throw new Exception("Jwt key missing");
+var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new Exception("Jwt key missing");
 
 builder.Services.AddAuthentication(auth =>
     {
