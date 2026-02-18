@@ -1,5 +1,4 @@
 using System.Text;
-using BookApp;
 using BookApp.Models;
 using BookApp.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -26,6 +25,8 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+var jwtKey = builder.Configuration["JwtKey"] ?? throw new Exception("Jwt key missing");
+
 builder.Services.AddAuthentication(auth =>
     {
         auth.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -33,11 +34,12 @@ builder.Services.AddAuthentication(auth =>
     })
     .AddJwtBearer(opt =>
     {
-        var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
+        var key = Encoding.UTF8.GetBytes(jwtKey);
+        
         opt.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+            IssuerSigningKey = new SymmetricSecurityKey(key),
             ValidateIssuer = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidateAudience = true,
@@ -49,9 +51,10 @@ builder.Services.AddAuthentication(auth =>
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("angular", policy =>
-        policy.WithOrigins("http://localhost:4200")
+        policy
             .AllowAnyHeader()
-            .AllowAnyMethod());
+            .AllowAnyMethod()
+            .AllowAnyOrigin());
 });
 
 var app = builder.Build();
@@ -87,8 +90,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("angular");
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+app.UseDefaultFiles();
+app.UseStaticFiles();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
+app.MapFallbackToFile("index.html");
 app.Run();
