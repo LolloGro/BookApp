@@ -5,7 +5,7 @@
   @if((quotes$ | async)?.length === 0){
     <p>No quotes added yet</p>
     <p>Do you like to add a quot?</p>
-    <a class="link-opacity-100" [routerLink]="['/book/create']">Create account</a>
+    <a class="link-opacity-100" [routerLink]="['/book/create']">Add quote</a>
   }
 
   @for (quote of quotes$ | async; track quote.id){
