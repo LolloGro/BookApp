@@ -89,6 +89,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "5000";
+app.Urls.Add($"http://*:{port}");
+
 app.UseCors("angular");
 //app.UseHttpsRedirection();
 app.UseDefaultFiles();
