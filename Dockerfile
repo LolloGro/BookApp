@@ -1,7 +1,7 @@
 # ---------- Build Angular ----------
 FROM node:20 AS angular-build
 WORKDIR /app
-COPY Frontend/package*.json ./
+COPY Frontend/BookFrontend/package*.json ./
 RUN npm install
 COPY Frontend/ .
 RUN npm run build --configuration production
