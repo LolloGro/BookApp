@@ -31,14 +31,17 @@
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
-            ]
+            ],
+            "outputPath": "dist/browser",
+            "index": "src/index.html",
+            "baseHref": "/"
           },
           "configurations": {
             "production": {
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kB",
+                  "maximumWarning": "1MB",
                   "maximumError": "1MB"
                 },
                 {
@@ -47,7 +50,9 @@
                   "maximumError": "8kB"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": true,
+              "sourceMap": true
             },
             "development": {
               "optimization": false,
@@ -56,21 +61,6 @@
             }
           },
           "defaultConfiguration": "production"
-        },
-        "serve": {
-          "builder": "@angular/build:dev-server",
-          "options": {
-            "proxyConfig": "proxy.conf.json"
-          },
-          "configurations": {
-            "production": {
-              "buildTarget": "BookFrontend:build:production"
-            },
-            "development": {
-              "buildTarget": "BookFrontend:build:development"
-            }
-          },
-          "defaultConfiguration": "development"
         },
         "test": {
           "builder": "@angular/build:unit-test"
