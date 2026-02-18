@@ -1,10 +1,10 @@
 # ---------- Build Angular ----------
 FROM node:20 AS angular-build
 WORKDIR /app
-COPY Frontend/BookFrontend/package*.json ./
+COPY Frontend/BookFrontend/package.json Frontend/BookFrontend/package-lock.json ./
 RUN npm install
-COPY Frontend/ .
-RUN npm run build --configuration production
+COPY Frontend/BookFrontend/ .
+RUN npm run build -- --configuration production
 
 # ---------- Build .NET backend ----------
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS dotnet-build
