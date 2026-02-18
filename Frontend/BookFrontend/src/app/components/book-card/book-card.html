@@ -1,11 +1,9 @@
 <h2 class="text-center mb-4">Book's in library</h2>
 
 @if((books$ | async)?.length === 0){
-  <div class="d-flex justify-content-center align-items-center">
     <p>No books in library yet</p>
     <p>Do you want to add a book?</p>
     <a class="link-opacity-100" [routerLink]="['/book/create']">Add book</a>
-  </div>
 }
 
 <div class="book-card">
