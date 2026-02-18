@@ -22,7 +22,7 @@ export interface PaginationResult<T>{
 })
 
 export class QuoteService {
-  private api = 'http://localhost:5249/api/Quote';
+  private api = '/api/Quote';
 
   private quoteSubject = new BehaviorSubject<QuoteType[]>([]);
   private totalCountSubject = new BehaviorSubject<number>(0);

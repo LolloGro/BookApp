@@ -10,7 +10,7 @@ export interface Login {token: string}
 
 export class LoginService {
 
-  private api = 'http://localhost:5249/api/Auth';
+  private api = '/api/Auth';
   private tokenKey = "token";
   private isLoggedIn():boolean{
     return !!this.getToken();

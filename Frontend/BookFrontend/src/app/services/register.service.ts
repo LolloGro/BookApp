@@ -13,7 +13,7 @@ export interface RegisterUser {
 
 export class RegisterService {
 
-  private api = 'http://localhost:5249/api/Auth';
+  private api = '/api/Auth';
   constructor(private http: HttpClient) { }
 
   register(data:RegisterUser){

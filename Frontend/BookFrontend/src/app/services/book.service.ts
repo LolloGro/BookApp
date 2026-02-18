@@ -20,7 +20,7 @@ export interface BookType {
 })
 
 export class BookService {
-  private api = 'http://localhost:5249/api/Book';
+  private api = '/api/Book';
   private bookSubject = new BehaviorSubject<BookType[]>([]);
   books$ =  this.bookSubject.asObservable();
 
