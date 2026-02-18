@@ -1,10 +1,10 @@
 <h2 class="text-center mb-4">Book's in library</h2>
 
-<div class="book-card">
+<div class="book-card d-flex justify-content-center align-items-center">
   @if((books$ | async)?.length === 0){
     <p>No books in library yet</p>
     <p>Do you want to add a book?</p>
-    <a class="link-opacity-100" [routerLink]="['/book/create']">Create account</a>
+    <a class="link-opacity-100" [routerLink]="['/book/create']">Add book</a>
   }
 
   @for (book of books$ | async; track book.id){
